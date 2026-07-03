@@ -78,9 +78,7 @@ export function buildMatrices(
 }
 
 export function columnStats(rows: Record<string, string | number>[], col: string) {
-  const values = rows
-    .map((r) => Number(r[col]))
-    .filter((v) => Number.isFinite(v));
+  const values = rows.map((r) => Number(r[col])).filter((v) => Number.isFinite(v));
   if (values.length === 0) return { min: 0, max: 1, mean: 0.5 };
   const min = Math.min(...values);
   const max = Math.max(...values);

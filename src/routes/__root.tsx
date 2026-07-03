@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -79,15 +80,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ElastIQ — Simulador Econométrico de Preço e Vendas" },
-      { name: "description", content: "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade." },
+      {
+        name: "description",
+        content:
+          "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade.",
+      },
       { property: "og:title", content: "ElastIQ — Simulador Econométrico de Preço e Vendas" },
-      { property: "og:description", content: "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade." },
+      {
+        property: "og:description",
+        content:
+          "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "ElastIQ — Simulador Econométrico de Preço e Vendas" },
-      { name: "twitter:description", content: "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a95fa6f1-9115-4447-9220-ed087a09c8e9/id-preview-5268284c--df1f9f50-b240-41c5-a481-62833051e36f.lovable.app-1783089799915.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a95fa6f1-9115-4447-9220-ed087a09c8e9/id-preview-5268284c--df1f9f50-b240-41c5-a481-62833051e36f.lovable.app-1783089799915.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Envie seus dados, ajuste variáveis como preço e veja em tempo real o impacto nas vendas com regressão e elasticidade.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a95fa6f1-9115-4447-9220-ed087a09c8e9/id-preview-5268284c--df1f9f50-b240-41c5-a481-62833051e36f.lovable.app-1783089799915.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a95fa6f1-9115-4447-9220-ed087a09c8e9/id-preview-5268284c--df1f9f50-b240-41c5-a481-62833051e36f.lovable.app-1783089799915.png",
+      },
     ],
     links: [
       {
@@ -112,6 +133,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <Analytics />
       </body>
     </html>
   );
@@ -129,9 +151,12 @@ function RootComponent() {
         router.invalidate();
         if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
       });
-      (window as unknown as { __authSub?: { unsubscribe: () => void } }).__authSub = sub.subscription;
+      (window as unknown as { __authSub?: { unsubscribe: () => void } }).__authSub =
+        sub.subscription;
     });
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [queryClient, router]);
 
   return (

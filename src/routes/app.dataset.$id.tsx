@@ -5,13 +5,26 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import {
-  ResponsiveContainer, ComposedChart, Line, Scatter, XAxis, YAxis,
-  CartesianGrid, Tooltip, ReferenceDot,
+  ResponsiveContainer,
+  ComposedChart,
+  Line,
+  Scatter,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceDot,
 } from "recharts";
 import { fitOLS, predict } from "@/lib/regression";
 import { buildMatrices, columnStats } from "@/lib/dataset-utils";
@@ -78,7 +91,9 @@ function Simulator() {
     const out: { x: number; predicted: number; actual?: number }[] = [];
     for (let i = 0; i <= steps; i++) {
       const x = stats.min + ((stats.max - stats.min) * i) / steps;
-      const featureValues = features.map((f) => (f === primary ? x : sliderValues[f] ?? columnStats(data.rows, f).mean));
+      const featureValues = features.map((f) =>
+        f === primary ? x : (sliderValues[f] ?? columnStats(data.rows, f).mean),
+      );
       out.push({ x, predicted: predict(model, featureValues) });
     }
     const actualPts = data.rows
@@ -95,7 +110,11 @@ function Simulator() {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      updateDataset(id, { target_column: target, feature_columns: features, use_log_log: useLogLog });
+      updateDataset(id, {
+        target_column: target,
+        feature_columns: features,
+        use_log_log: useLogLog,
+      });
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["dataset", id] });
@@ -110,7 +129,10 @@ function Simulator() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <Link to="/app" className="mb-2 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/app"
+            className="mb-2 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="h-4 w-4" /> Voltar
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">{data.name}</h1>
@@ -128,41 +150,51 @@ function Simulator() {
           <div className="space-y-2">
             <Label>Variável a explicar (Y)</Label>
             <Select value={target} onValueChange={setTarget}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
-                {numericColumns.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                {numericColumns.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
             <Label>Variáveis explicativas (X)</Label>
             <div className="space-y-2 rounded-md border border-border p-3">
-              {numericColumns.filter((c) => c !== target).map((c) => (
-                <label key={c} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={features.includes(c)}
-                    onCheckedChange={(v) => {
-                      setFeatures((prev) => {
-                        const next = v ? [...prev, c] : prev.filter((x) => x !== c);
-                        setSliderValues((sv) => {
-                          const nv = { ...sv };
-                          if (v && !(c in nv)) nv[c] = columnStats(data.rows, c).mean;
-                          return nv;
+              {numericColumns
+                .filter((c) => c !== target)
+                .map((c) => (
+                  <label key={c} className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={features.includes(c)}
+                      onCheckedChange={(v) => {
+                        setFeatures((prev) => {
+                          const next = v ? [...prev, c] : prev.filter((x) => x !== c);
+                          setSliderValues((sv) => {
+                            const nv = { ...sv };
+                            if (v && !(c in nv)) nv[c] = columnStats(data.rows, c).mean;
+                            return nv;
+                          });
+                          if (!next.includes(primary)) setPrimary(next[0] ?? "");
+                          return next;
                         });
-                        if (!next.includes(primary)) setPrimary(next[0] ?? "");
-                        return next;
-                      });
-                    }}
-                  />
-                  {c}
-                </label>
-              ))}
+                      }}
+                    />
+                    {c}
+                  </label>
+                ))}
             </div>
           </div>
           <div className="flex items-center justify-between rounded-md border border-border p-3">
             <div>
               <Label className="text-sm">Modelo log-log</Label>
-              <p className="text-xs text-muted-foreground">Coeficientes viram elasticidades (% por %).</p>
+              <p className="text-xs text-muted-foreground">
+                Coeficientes viram elasticidades (% por %).
+              </p>
             </div>
             <Switch checked={useLogLog} onCheckedChange={setUseLogLog} />
           </div>
@@ -170,9 +202,15 @@ function Simulator() {
             <div className="space-y-2">
               <Label>Variável do gráfico</Label>
               <Select value={primary} onValueChange={setPrimary}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {features.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                  {features.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -215,19 +253,57 @@ function Simulator() {
                 <ResponsiveContainer width="100%" height="100%">
                   <ComposedChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                    <XAxis dataKey="x" type="number" domain={["auto", "auto"]}
-                      stroke="var(--muted-foreground)" tick={{ fontSize: 12 }}
-                      label={{ value: primary, position: "insideBottom", offset: -4, fill: "var(--muted-foreground)" }} />
-                    <YAxis stroke="var(--muted-foreground)" tick={{ fontSize: 12 }}
-                      label={{ value: target, angle: -90, position: "insideLeft", fill: "var(--muted-foreground)" }} />
-                    <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8 }}
-                      formatter={(v: number) => v.toLocaleString("pt-BR", { maximumFractionDigits: 2 })} />
+                    <XAxis
+                      dataKey="x"
+                      type="number"
+                      domain={["auto", "auto"]}
+                      stroke="var(--muted-foreground)"
+                      tick={{ fontSize: 12 }}
+                      label={{
+                        value: primary,
+                        position: "insideBottom",
+                        offset: -4,
+                        fill: "var(--muted-foreground)",
+                      }}
+                    />
+                    <YAxis
+                      stroke="var(--muted-foreground)"
+                      tick={{ fontSize: 12 }}
+                      label={{
+                        value: target,
+                        angle: -90,
+                        position: "insideLeft",
+                        fill: "var(--muted-foreground)",
+                      }}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: 8,
+                      }}
+                      formatter={(v: number) =>
+                        v.toLocaleString("pt-BR", { maximumFractionDigits: 2 })
+                      }
+                    />
                     <Scatter dataKey="actual" fill="var(--accent)" name="Dados reais" />
-                    <Line type="monotone" dataKey="predicted" stroke="var(--primary)" strokeWidth={3}
-                      dot={false} name="Previsão do modelo" />
+                    <Line
+                      type="monotone"
+                      dataKey="predicted"
+                      stroke="var(--primary)"
+                      strokeWidth={3}
+                      dot={false}
+                      name="Previsão do modelo"
+                    />
                     {sliderValues[primary] != null && currentPrediction != null && (
-                      <ReferenceDot x={sliderValues[primary]} y={currentPrediction}
-                        r={6} fill="var(--primary)" stroke="var(--background)" strokeWidth={2} />
+                      <ReferenceDot
+                        x={sliderValues[primary]}
+                        y={currentPrediction}
+                        r={6}
+                        fill="var(--primary)"
+                        stroke="var(--background)"
+                        strokeWidth={2}
+                      />
                     )}
                   </ComposedChart>
                 </ResponsiveContainer>
@@ -251,7 +327,10 @@ function Simulator() {
                       </span>
                     </div>
                     <Slider
-                      min={s.min} max={s.max} step={step} value={[val]}
+                      min={s.min}
+                      max={s.max}
+                      step={step}
+                      value={[val]}
                       onValueChange={([v]) => setSliderValues((sv) => ({ ...sv, [f]: v }))}
                     />
                     <div className="mt-1 flex justify-between text-xs text-muted-foreground">
@@ -269,7 +348,11 @@ function Simulator() {
               <p className="mb-3 text-sm font-semibold">Coeficientes do modelo</p>
               <table className="w-full text-sm">
                 <thead className="text-left text-xs uppercase text-muted-foreground">
-                  <tr><th className="py-1">Variável</th><th>Coeficiente</th><th>Interpretação</th></tr>
+                  <tr>
+                    <th className="py-1">Variável</th>
+                    <th>Coeficiente</th>
+                    <th>Interpretação</th>
+                  </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   <tr>
@@ -285,7 +368,7 @@ function Simulator() {
                         <td className="tabular-nums">{b.toFixed(4)}</td>
                         <td className="text-muted-foreground">
                           {useLogLog
-                            ? `elasticidade: +1% em ${f} → ${(b).toFixed(2)}% em ${target}`
+                            ? `elasticidade: +1% em ${f} → ${b.toFixed(2)}% em ${target}`
                             : `+1 em ${f} → ${b >= 0 ? "+" : ""}${b.toFixed(3)} em ${target}`}
                         </td>
                       </tr>
