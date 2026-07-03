@@ -27,7 +27,8 @@ function invert(matrix: number[][]): number[][] {
         swap = r;
       }
     }
-    if (Math.abs(pivot) < 1e-12) throw new Error("Matriz singular — colunas colineares ou dados insuficientes.");
+    if (Math.abs(pivot) < 1e-12)
+      throw new Error("Matriz singular — colunas colineares ou dados insuficientes.");
     if (swap !== i) [a[i], a[swap]] = [a[swap], a[i]];
     const p = a[i][i];
     for (let j = 0; j < 2 * n; j++) a[i][j] /= p;
@@ -50,7 +51,8 @@ export function fitOLS(params: {
   const { X, y, featureNames, useLogLog } = params;
   const n = y.length;
   const k = featureNames.length;
-  if (n < k + 2) throw new Error(`Poucas observações (${n}) para ${k} variáveis. Envie mais dados.`);
+  if (n < k + 2)
+    throw new Error(`Poucas observações (${n}) para ${k} variáveis. Envie mais dados.`);
 
   // Add intercept column
   const Xi = X.map((row) => [1, ...row]);

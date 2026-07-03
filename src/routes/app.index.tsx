@@ -71,7 +71,8 @@ function Dashboard() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Meus datasets</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Envie um CSV com colunas numéricas para começar a simular cenários. Os dados ficam salvos neste navegador.
+          Envie um CSV com colunas numéricas para começar a simular cenários. Os dados ficam salvos
+          neste navegador.
         </p>
       </div>
 
@@ -82,12 +83,21 @@ function Dashboard() {
         <div className="mt-4 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="space-y-2">
             <Label htmlFor="ds-name">Nome (opcional)</Label>
-            <Input id="ds-name" placeholder="Ex.: Vendas loja centro 2024"
-              value={name} onChange={(e) => setName(e.target.value)} />
+            <Input
+              id="ds-name"
+              placeholder="Ex.: Vendas loja centro 2024"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div>
-            <input ref={fileRef} type="file" accept=".csv,text/csv"
-              className="hidden" onChange={onPickFile} />
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".csv,text/csv"
+              className="hidden"
+              onChange={onPickFile}
+            />
             <Button onClick={() => fileRef.current?.click()} disabled={createMutation.isPending}>
               <Plus className="mr-2 h-4 w-4" />
               {createMutation.isPending ? "Carregando…" : "Escolher CSV"}
@@ -95,7 +105,8 @@ function Dashboard() {
           </div>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Formato: primeira linha com nomes das colunas. Aceita separador , ou ;. Use ponto ou vírgula para decimais.
+          Formato: primeira linha com nomes das colunas. Aceita separador , ou ;. Use ponto ou
+          vírgula para decimais.
         </p>
       </Card>
 
@@ -113,17 +124,19 @@ function Dashboard() {
                 <Database className="h-4 w-4" />
                 {d.rows.length} linhas · {d.columns.length} colunas
               </div>
-              <button onClick={() => deleteMutation.mutate(d.id)}
-                className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100">
+              <button
+                onClick={() => deleteMutation.mutate(d.id)}
+                className="text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+              >
                 <Trash2 className="h-4 w-4" />
               </button>
             </div>
             <h3 className="mt-3 font-semibold">{d.name}</h3>
-            <p className="mt-1 truncate text-xs text-muted-foreground">
-              {d.columns.join(" · ")}
-            </p>
+            <p className="mt-1 truncate text-xs text-muted-foreground">{d.columns.join(" · ")}</p>
             <Link to="/app/dataset/$id" params={{ id: d.id }} className="mt-4">
-              <Button variant="secondary" className="w-full">Abrir simulador</Button>
+              <Button variant="secondary" className="w-full">
+                Abrir simulador
+              </Button>
             </Link>
           </Card>
         ))}

@@ -32,8 +32,8 @@ function Landing() {
             Se eu baixar R$1 no preço, <span className="text-primary">quanto vendo a mais?</span>
           </h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Envie um CSV com seus dados históricos de preço, vendas, promoções e o que mais importar.
-            O ElastIQ ajusta uma regressão OLS (e elasticidade log-log) e deixa você
+            Envie um CSV com seus dados históricos de preço, vendas, promoções e o que mais
+            importar. O ElastIQ ajusta uma regressão OLS (e elasticidade log-log) e deixa você
             simular decisões em tempo real com gráficos interativos.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -41,16 +41,30 @@ function Landing() {
               <Button size="lg">Começar agora</Button>
             </Link>
             <a href="#como-funciona">
-              <Button size="lg" variant="secondary">Como funciona</Button>
+              <Button size="lg" variant="secondary">
+                Como funciona
+              </Button>
             </a>
           </div>
         </div>
 
         <section id="como-funciona" className="mt-24 grid gap-6 sm:grid-cols-3">
           {[
-            { icon: "📥", title: "1. Envie seu CSV", body: "Colunas como preço, vendas, temperatura, gastos com anúncio." },
-            { icon: "📈", title: "2. Escolha o alvo", body: "Selecione a variável a explicar (vendas) e as explicativas (preço…)." },
-            { icon: "🎛️", title: "3. Simule cenários", body: "Arraste sliders e veja o impacto previsto em tempo real." },
+            {
+              icon: "📥",
+              title: "1. Envie seu CSV",
+              body: "Colunas como preço, vendas, temperatura, gastos com anúncio.",
+            },
+            {
+              icon: "📈",
+              title: "2. Escolha o alvo",
+              body: "Selecione a variável a explicar (vendas) e as explicativas (preço…).",
+            },
+            {
+              icon: "🎛️",
+              title: "3. Simule cenários",
+              body: "Arraste sliders e veja o impacto previsto em tempo real.",
+            },
           ].map((c) => (
             <div key={c.title} className="rounded-2xl border border-border bg-card p-6">
               <div className="text-3xl">{c.icon}</div>
